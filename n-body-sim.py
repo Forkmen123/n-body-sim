@@ -1,2 +1,9 @@
+import numpy as np
+
+
 class Body:
-	__init__(self, position: tuple, mass: float, speed: float)
+  def __init__(self, position: tuple, mass: float, initial_speed: float):
+    pass
+
+
+
