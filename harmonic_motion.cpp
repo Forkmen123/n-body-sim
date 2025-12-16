@@ -1,5 +1,7 @@
 #include <iostream> // This is like "import" for printing text
 #include <string>
+#include <vector>
+#include <fstream> // file stream
 
 
 class Spring {
@@ -31,50 +33,31 @@ class Spring {
     }; 
 
 
-int main() {
+int main() { // << are insertion operators
     std::string bienvenue = "The simulation is starting...";
-    std::cout << bienvenue << std::endl;
+    std::cout << bienvenue << std::endl; // standard character output
     
     Spring a(10.0, 0.1, 10.0, 0.2);
     std::cout << a.mass << std::endl;
 
     int step = 2000;
-    int total_time = 5;
+    double total_time = 5.0;
     double dt = total_time / step;
 
-//  for (start; stop; increment) i++ veut dire i += 1
+    std::vector<double> position_history(step); // this is an empty list
+    // (step) is for the size of the list
+    std::ofstream file("results.csv"); // output file stream
+    
+    //  for (start; stop; increment) i++ veut dire i += 1
     for (int i = 0; i < step; i++) {
         a.update(dt);
-        double position = a.position;
+        position_history[i] = a.position;
+    }
+
+    for (int i = 0; i < step; i++) {
+        file << position_history[i] << std::endl;
     }
 
     return 0; // pour la bonne gestion d'erreurs
 }
 
-// step = 2000
-// total_time = 5
-// dt = total_time / step
-
-// position = np.zeros(step)
-
-// for i in range(step):
-//     a.update(dt)
-//     position[i] = a.position[0]
-
-
-// time = np.linspace(0, total_time, step)
-
-// time_elapsed = 0
-
-// plt.xlim(0, total_time)
-// plt.ylim(-position[0], position[0])
-// vertical_line = plt.axvline(0, color="red")
-// plt.plot(time, position)
-
-// for i in range(step):
-//     if i % 25 == 0:
-//         vertical_line.set_xdata([time[i], time[i]])
-//         plt.pause(dt)
-    
-
-// plt.show()
