@@ -3,37 +3,58 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.ticker import FuncFormatter
 
+
+# astrophysical constants
 G = 6.67e-11
 Mo = 2e30 # masse du soleil
 Mt = 5.972e24 # masse de la terre
-Rot = 150e6 # distance terre soleil
+Rot = 150e9 # distance terre soleil
 Vt = 30e3 # vitesse de révolution de la terre
+Ro = 700000e3 # rayon du soleil
+
 
 class Body:
-    def __init__(self, position, mass, initial_speed, name, color=None):
+    def __init__(self, position, mass, initial_speed, name, color=None, radius=True):
         self.position = np.array(position, dtype=float)
         self.vitesse = np.array(initial_speed, dtype=float)
         self.name = name
         self.mass = mass
         self.color = color
         self.acceleration = np.zeros(2)
-        self.path_x = []
-        self.path_y = []
+        self.path = [[], []] # [[historique path x], [historique path x]]
 
+        # calculs pour le rayon
+        if radius is True:
+            # density = 1410 # densité du soleil en kg/m^3
+            density = 0.001 
+            vol = self.mass / density
+            self.radius = (3 * vol / (4 * np.pi)) ** (1/3)
+        else:
+            self.radius = radius
+            
     def update(self, dt):
+        # euler integration --> peut être plus précis
         self.vitesse += self.acceleration * dt
         self.position += self.vitesse * dt
-
-        self.path_x.append(self.position[0])
-        self.path_y.append(self.position[1])
-
-        MAX_LEN = 200
-        if len(self.path_x) > MAX_LEN:
-            self.path_x.pop(0)
-            self.path_y.pop(0)
+        
+        TRAIL_LENGTH = 2000 # path length
+        self.path[0].append(self.position[0])
+        self.path[1].append(self.position[1])
+        if len(self.path[0]) > TRAIL_LENGTH:
+            self.path[0].pop(0)
+            self.path[1].pop(0)
 
     def reset_acceleration(self):
         self.acceleration = np.zeros(2)
+
+
+class Particules(Body):
+    def __init__(self, n, color='gray'):
+        self.n = n # n = nombre de particulesi
+
+    def random_speed(self, chaos: float): # 0 = peu chaos... 1 = très cahotique  
+        pass 
+
 
 class Universe:
     def __init__(self):
@@ -42,23 +63,36 @@ class Universe:
     def add_body(self, body):
         self.bodies.append(body)
 
+    def add_particules(self, particules):
+        pass
+
     def compute_gravity(self):
         for body in self.bodies:
-            body.reset_acceleration()
+            body.reset_acceleration() # on reset l'accélération après chaque dt...
+        
+    # N-Body logic
+    # Optimization: We could use Newton's 3rd law (F_ab = -F_ba) to halve loops,
+    # but for N=3, this is readable and fast enough.
 
-        # N-Body logic
-        # Optimization: We could use Newton's 3rd law (F_ab = -F_ba) to halve loops,
-        # but for N=3, this is readable and fast enough.
         for i, body1 in enumerate(self.bodies):
             for j, body2 in enumerate(self.bodies):
-                if i != j:
+                if i > j:
                     r_vec = body1.position - body2.position
                     dist = np.linalg.norm(r_vec)
-                    if dist == 0: continue # Avoid division by zero
+
+                    if dist < body1.radius + body2.radius: 
+                        m1, m2 = body1.mass, body2.mass
+                        v1, v2 = body1.vitesse, body2.vitesse
+                        x1, x2 = body1.position, body2.position
+
+                        # conservation de la quantité de mouvement
+                        body1.vitesse = v1 - (2*m2 / (m1+m2)) * np.dot(v1-v2, x1-x2) / dist**2 * (x1-x2)
+                        body2.vitesse = v1 - (2*m1 / (m1+m2)) * np.dot(v2-v1, x2-x1) / dist**2 * (x2-x1)
                     
                     # a = -G * M / r^3 * vec(r)
-                    acc_mag = -((G * body2.mass) / (dist ** 3))
-                    body1.acceleration += acc_mag * r_vec
+                    else:
+                        acc_mag = -((G * body2.mass) / (dist ** 3))
+                        body1.acceleration += acc_mag * r_vec
 
     def step(self, dt):
         self.compute_gravity()
@@ -66,19 +100,21 @@ class Universe:
             body.update(dt)
 
 def axis_in_UA(x, pos):
-  return f'{x/Rot:.1f}'
+    return f'{x/Rot:.1f}'
 
 def run_simulation():
     sim = Universe()
-    # trou_noir = Body(position, mass, initial_speed, name, color)
-    soleil = Body([0, 0], Mo, [0, 0], "Soleil", 'orange')
-    # terre = Body([Rot, 0], Mt, [0, Vt], "Terre", 'blue')
-    comete = Body([0, 1000], Mt, [0, 0], "Comète", 'red')
+    # (position, mass, initial_speed, name, color, radius)
+    soleil = Body([0, 0], 0.2*Mo, [0, 0], "Soleil", 'orange', Ro)
+    terre = Body([Rot, 0], Mt, [0, Vt], "Terre", 'blue')
+    bod1 = Body([0,  Rot], 40*Mt, [0, -0.1*Vt], "Comète", 'red')
+    bod2 = Body([0, -Rot], Mt, [0, 0.1*Vt], "Comète", 'red')
 
     # sim.add_body(trou_noir)
-    sim.add_body(soleil)
-    # sim.add_body(terre)
-    sim.add_body(comete)
+    # sim.add_body(soleil)
+    sim.add_body(terre)
+    sim.add_body(bod1)
+    sim.add_body(bod2)
 
     # Setup Plot
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -87,7 +123,7 @@ def run_simulation():
     fig.patch.set_facecolor('black')
     
     # Dynamic axis limits (start zoomed out)
-    limit = 2e10
+    limit = 2e11
     ax.set_xlim(-limit, limit)
     ax.set_ylim(-limit, limit)
 
@@ -104,7 +140,7 @@ def run_simulation():
     
     for body in sim.bodies:
         line, = ax.plot([], [], '-', lw=1, alpha=0.5, color=body.color)
-        point, = ax.plot([], [], 'o', label=body.name, color=body.color)
+        point, = ax.plot([], [], 'o', markersize=body.radius/10e7, label=body.name, color=body.color)
         lines.append(line)
         points.append(point)
 
@@ -118,7 +154,7 @@ def run_simulation():
 
         for i, body in enumerate(sim.bodies):
             # Update trails
-            lines[i].set_data(body.path_x, body.path_y)
+            lines[i].set_data(body.path[0], body.path[1])
             # Update current position marker
             points[i].set_data([body.position[0]], [body.position[1]])
         
@@ -128,8 +164,17 @@ def run_simulation():
     ani = FuncAnimation(fig, update, frames=200, interval=20, blit=True)
     
     plt.title("N-Body Gravity Simulation", color='white')
-    plt.grid(True, alpha=0.15)
+    # plt.grid(True, alpha=0.15)
     plt.show()
+
+
+
+running = True
+while running:
+    for i in range(10):
+        
 
 if __name__ == "__main__":
     run_simulation()
+    # py n_body_sim.py dans le terminal fait que __name__ is set to __main__
+    # sinon, si on import n_body_sim.py __name__ != "__main__"

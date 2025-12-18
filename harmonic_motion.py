@@ -21,7 +21,6 @@ class Spring:
         self.velocity = self.velocity + dt * self.acceleration 
         self.position = self.position + dt * self.velocity
 
-
 a = Spring(10, 0.1, 10, 0.2)
 
 step = 2000
@@ -48,6 +47,5 @@ for i in range(step):
     if i % 25 == 0:
         vertical_line.set_xdata([time[i], time[i]])
         plt.pause(dt)
-    
 
 plt.show()
