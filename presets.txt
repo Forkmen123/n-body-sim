@@ -1,0 +1,5 @@
+trou_noir = Body([Ro, Ro], 1*Mo, [0, 0], "Trou Noir", 'white', Ro)
+soleil = Body([0, 0], 0.2*Mo, [0, 0], "Soleil", 'orange', Ro)
+terre = Body([Rot, 0], Mt, [-Vt, Vt], "Terre", 'blue')
+bod1 = Body([0,  Rot], 100*Mo, [0, -0.1*Vt], "Comète", 'red', Ro)
+bod2 = Body([0, -Rot], Mt, [0, 0.1*Vt], "Comète", 'red')
