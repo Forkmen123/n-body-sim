@@ -30,7 +30,7 @@ class Spring {
             velocity = velocity + dt * acceleration;
             position = position + dt * velocity;
         }
-    }; 
+}; 
 
 
 int main() { // << are insertion operators
