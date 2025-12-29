@@ -44,14 +44,19 @@ class Body:
         self.vitesse += self.acceleration * dt
         self.position += self.vitesse * dt
         
-        self.path[0].append(self.position[0])
-        self.path[1].append(self.position[1])
-        if len(self.path[0]) > TRAIL_LENGTH and isinstance(self, Body):
+        self.is_body = isinstance(self, Body)
+
+        if self.is_body:
+            self.path[0].append(self.position[0])
+            self.path[1].append(self.position[1])
+
+        if len(self.path[0]) > TRAIL_LENGTH and self.is_body:
             self.path[0].pop(0)
             self.path[1].pop(0)
 
     def reset_acceleration(self):
-        self.acceleration = np.zeros(2)
+        if isinstance(self):
+            self.acceleration = np.zeros(2)
 
 
 class Particules(Body):
@@ -62,10 +67,6 @@ class Particules(Body):
         self.acceleration = np.zeros((n, 2))
         self.color = color
         self.radius = 10000
-
-    def update(self, dt):
-        self.vitesse += self.acceleration * dt
-        self.position += self.vitesse * dt
 
     def reset_acceleration(self):
         self.acceleration = np.zeros((self.n, 2))
