@@ -1,5 +1,5 @@
-#include <iostream>
 using namespace std;
+#include <iostream>
 
 struct Number {
     int value;
@@ -17,4 +17,12 @@ struct Number {
     }
 
 
+};
+
+
+
+int main() {
+    Number n1(5), n2(10);
+    Number n3 = n1 + n2;
+    n3.display();
 }

@@ -1,11 +1,16 @@
+#pragma once 
+using namespace std;
+#include "Vec3D.hpp"
 #include <string>
 #include <vector>
 
+
 struct Body {
-    std::vector<double> position{3};
-    std::vector<double> vitesse{3};
-    std::vector<double> acceleration{3};
-    std::vector<double> path{trail_length};
+    Vec3D position;
+    Vec3D vitesse;
+    Vec3D acceleration;
+
+    std::vector<Vec3D> path;
 
     private:
         std::string _name;
@@ -15,9 +20,10 @@ struct Body {
     std::vector<double> initial_speed, std::string name, \
     std::string color, double radius);
 
-    void update(double dt);
+    // void update(double dt);
+       
 
-    void reset_acceleration();
+    // void reset_acceleration();
 };
 
 

@@ -1,7 +1,9 @@
+using namespace std;
 #include <iostream>
 #include <vector>
-#include "Body.hpp"
 #include "Vec3D.hpp"
+#include "Body.hpp"
+#include "Particules.hpp"
 
 // astronomic constants
 double const G = 6.67e-11;
