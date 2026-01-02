@@ -1,5 +1,4 @@
 #pragma once 
-using namespace std;
 #include "Vec3D.hpp"
 #include <string>
 #include <vector>
@@ -16,14 +15,11 @@ struct Body {
         std::string _name;
         std::string _color;
 
-    Body(std::vector<double> position, double mass, \
-    std::vector<double> initial_speed, std::string name, \
-    std::string color, double radius);
+    Body(std::string name, double mass, Vec3D position, Vec3D velocity, std::string color, double radius = 0, Vec3D acceleration = Vec3D(0, 0, 0));
 
-    // void update(double dt);
+    void update(double dt);
        
-
-    // void reset_acceleration();
+    void reset_acceleration();
 };
 
 

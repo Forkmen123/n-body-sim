@@ -1,9 +1,8 @@
-using namespace std;
 #include <iostream>
 #include <vector>
-#include "Vec3D.hpp"
-#include "Body.hpp"
-#include "Particules.hpp"
+#include "include/Vec3D.hpp"
+#include "include/Body.hpp"
+// #include "include/Particules.hpp"
 
 // astronomic constants
 double const G = 6.67e-11;
@@ -24,6 +23,14 @@ int const dt = 3600 * 0.1;
 int const play_speed = 1000;
 
 
- 
+int main() {
+    Vec3D vec1(1, 2, 3), vec2(2, 3, 4);
+    Vec3D vec3 = vec1 + vec2;
 
-
+    std::cout << vec1.length() << "\n";
+    std::cout << vec2.length() << "\n";
+    std::cout << vec3.length() << "\n";
+    vec1.print();
+    vec2.print();
+    vec3.print();
+}

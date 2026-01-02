@@ -1,20 +1,16 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-struct Number {
-    int value;
+
+void changeValue(int &num) {
+    num = 50;
+}
+
+int main() {
+    int value = 10;
+    changeValue(value);
+    cout << value;
     
-    Number(int v) {
-        value = v;
-    }
-
-    Number operator+(const Number &other) {
-        return Number(value + other.value);
-    }
-    
-    void display() {
-        cout << value << endl;
-    }
-
-
+    return 0;
 }
