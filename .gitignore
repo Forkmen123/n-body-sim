@@ -1,2 +1,7 @@
 venv
-obj
+obj/
+sim
+*.o
+.DS_Store/
+.vscode/
+.idea/
