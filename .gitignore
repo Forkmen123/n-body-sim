@@ -1,6 +1,6 @@
 venv
 obj/
-sim
+n-body-sim
 *.o
 .DS_Store/
 .vscode/
