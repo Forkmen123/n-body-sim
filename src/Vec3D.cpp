@@ -1,7 +1,8 @@
 #include "Vec3D.hpp"
+#include <string>
+#include <iomanip>
 #include <cmath>
 #include <iostream>
-#include <string>
 
 double x, y, z;
 
@@ -42,8 +43,9 @@ double Vec3D::length() const {
     return std::sqrt(x * x + y * y + z * z);
 }
 
-void Vec3D::print() const {
-    std::cout << "[" << x << ", " << y << ", " << z << "]\n";
+void Vec3D::display(int precision) const {
+    std::cout << std::scientific << std::setprecision(precision);
+    std::cout << "[" << this->x << ", " << this->y << ", " << this->z << "]";
 }
 
 

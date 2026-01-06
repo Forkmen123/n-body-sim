@@ -17,9 +17,9 @@ Body::Body(std::string name, double mass, Vec3D position, Vec3D velocity, std::s
     _acc(acceleration)
     
 {
-    if (_radius == 0) {
-        double vol = _mass / Const::DENSITY;
-        _radius = (3 * vol / pow((4 * Const::PI), 1.0/3.0));
+    if (radius == 0) {
+        double vol = mass / Const::DENSITY;
+        radius = (3 * vol / pow((4 * Const::PI), 1.0/3.0));
     } 
 }
 
@@ -28,8 +28,8 @@ void Body::update(double dt) {
     _pos += _vel * dt;
 
     // seulement pour les bodies
-    path[0].push_back(_pos[0]);
-    path[1].push_back(_pos[1]);
+    path[0].push_back(pos[0]);
+    path[1].push_back(pos[1]);
     if (path[0].size() > Const::TRAIL_LENGTH) {
         path[0].pop_back();
         path[1].pop_back();

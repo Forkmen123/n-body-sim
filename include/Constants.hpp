@@ -17,12 +17,12 @@ namespace Const {
     // // visual constants 
     inline constexpr double DENSITY = 0.001;
     inline constexpr double TRAIL_LENGTH = 5000;
-    inline constexpr double SCALE = 200.0 / Rot; // in meters
+    inline constexpr double SCALE = 100.0 / Rot; // in meters
 
     // // simulation constants
     inline constexpr int fps = 60;
-    inline constexpr int dt = 3600 * 0.1;
-    inline constexpr int play_speed = 1000;
+    inline constexpr int play_speed = 5;
+    inline constexpr int dt = 3600 * 0.1 * play_speed;
     
     // screen constants 
     inline constexpr int screenWidth = 800;

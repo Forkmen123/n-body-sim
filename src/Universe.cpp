@@ -13,13 +13,12 @@ std::vector<Body>& Universe::get_bodies() {
     return bodies;
 }
 
-
 // void Universe::add_dust(Particules particules) {
 //     particules.push_back(particules);
 // }
 
 void Universe::compute_gravity() {
-    for (Body body : bodies) {
+    for (Body& body : bodies) {
        body.reset_acceleration();
     }
 
@@ -33,31 +32,19 @@ void Universe::compute_gravity() {
             Body& b1 = bodies[i];
             Body& b2 = bodies[j];
             Vec3D r_vec = b1._pos - b2._pos;
-
             double dist = r_vec.length();
-            // if (dist < b1._radius + b2._radius) {
-                // conditions à ajouter
-            // }
-            // else {
-            double pow_dist = pow(dist, 3);
+            double pow_dist = std::pow(dist, 3);
 
-            Vec3D acc_mag = -((Const::G * b2._mass) / pow_dist);
-            for (int i = 0; i < 3; i++) {
-                b1._acc[i] += acc_mag[i] * r_vec[i];
-            }
-
-            Vec3D acc_mag_2 = ((Const::G * b1._mass) / pow_dist);
-            for (int i = 0; i < 3; i++) {
-                b2._acc[i] += acc_mag_2[i] * r_vec[i];
-            }
-
-            // }
-
+            if (dist < 1e-5) continue;
+ 
+            double length_1 = -((Const::G * b2._mass) / pow_dist);
+            double length_2 = ((Const::G * b1._mass) / pow_dist);
+            
+            b1._acc += r_vec * length_1;
+            b2._acc -= r_vec * length_2; 
             // for particule in particules
-
         }
     }
-
 }
 
 void Universe::step(int dt) {

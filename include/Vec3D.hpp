@@ -17,7 +17,7 @@ struct Vec3D {
     double& operator[](int index);
 
     double length() const;
-    void print() const;
+    void display(int precision = 5) const;
 };
 
 
