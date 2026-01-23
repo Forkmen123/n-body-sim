@@ -14,7 +14,15 @@ struct Body {
     Vec3D _acc;
     std::vector<double> path[2];
 
-    Body(std::string name, double mass, Vec3D position, Vec3D velocity, std::string color, double radius = 0, Vec3D acceleration = Vec3D(0, 0, 0));
+    Body(
+        std::string name, 
+        double mass, 
+        Vec3D position, 
+        Vec3D velocity, 
+        std::string color, 
+        double radius = 0, 
+        Vec3D acceleration = Vec3D(0, 0, 0)
+    );
 
     void update(double dt);
        

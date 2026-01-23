@@ -7,7 +7,14 @@
 #include <numbers>
 
 
-Body::Body(std::string name, double mass, Vec3D position, Vec3D velocity, std::string color, double radius, Vec3D acceleration) : 
+Body::Body(
+    std::string name, 
+    double mass, 
+    Vec3D position, 
+    Vec3D velocity, 
+    std::string color, 
+    double radius, 
+    Vec3D acceleration) : 
     _name(name), 
     _mass(mass), 
     _pos(position), 
@@ -28,8 +35,8 @@ void Body::update(double dt) {
     _pos += _vel * dt;
 
     // seulement pour les bodies
-    path[0].push_back(pos[0]);
-    path[1].push_back(pos[1]);
+    path[0].push_back(_pos[0]);
+    path[1].push_back(_pos[1]);
     if (path[0].size() > Const::TRAIL_LENGTH) {
         path[0].pop_back();
         path[1].pop_back();
