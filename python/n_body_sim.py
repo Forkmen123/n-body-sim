@@ -97,9 +97,6 @@ class Universe:
         for body in self.bodies:
             body.reset_acceleration() # on reset l'accélération après chaque dt...
         
-    # N-Body logic
-    # Optimization: We could use Newton's 3rd law (F_ab = -F_ba) to halve loops,
-    # but for N=3, this is readable and fast enough.
 
         for i, body1 in enumerate(self.bodies):
             for j, body2 in enumerate(self.bodies):
@@ -162,7 +159,7 @@ def run_simulation():
     bod1 = Body([Rot, 0], Mt, [0, Vt], "terre", 'green')
     bod2 = Body([0, 0], Mo, [0, 0], "bod2", 'yellow', Ro)
     bod3 = Body([0, Rot], Mo, [0.5 * Vt, 0], "bod3", 'red', Ro)
-    poussière = Particules(100, 10 * Mo, "white", "poussière", radius=Ro)
+    poussière = Particules(1000, 10 * Mo, "white", "poussière", radius=Ro)
 
     sim.add_body(bod1)
     sim.add_body(bod2)
